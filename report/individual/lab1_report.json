@@ -1,0 +1,157 @@
+{
+ "seed": 9522,
+ "predictions": {
+  "ml_f1": {
+   "text": "F1 từ khoảng 0.85 đến 0.9, precision cao hơn recall vì dữ liệu bị lệch thiên về lớp ham",
+   "time": "15:54:51"
+  },
+  "ml_lr": {
+   "text": "lr=0.001 thì đường loss sẽ giảm thẳng đều, lr=50 thì sẽ có những đoạn biến động mạnh",
+   "time": "16:02:38"
+  },
+  "dl_curve": {
+   "text": "val loss chỉ giảm đến ngưỡng nhất định, sau đó có thể tăng trở lại khi xảy ra overfitting. MLP sẽ có F1 cao hơn logistic regression",
+   "time": "16:11:01"
+  },
+  "dl_relu": {
+   "text": "Nếu bỏ ReLU, 2 tầng tuyến tính liên tiếp gộp lại, hoàn toàn tương đương Logistic Regression. F1 có thể sẽ tăng lên do MLP có dấu hiệu overfit từ trước",
+   "time": "16:18:36"
+  },
+  "emb_search": {
+   "text": "spam",
+   "time": "16:20:45"
+  },
+  "emb_tricky": {
+   "text": "Mô hình 3b. Encoder + LogReg sẽ đoán đúng nhiều hơn",
+   "time": "16:22:24"
+  },
+  "llm_models": {
+   "text": "1. Model lớn F1 cao hơn một chút. 2. Đắt gấp 10 lần. 3. Có thể thắng hoặc hòa 3b về F1 nhưng chậm và đắt hơn nhiều.",
+   "time": "16:38:51"
+  },
+  "llm_fewshot": {
+   "text": "F1 tăng hoặc giữ nguyên. Chi phí tăng mạnh do prompt dài hơn.",
+   "time": "16:43:50"
+  }
+ },
+ "checks": {
+  "1.1 vectorize": true,
+  "1.2 sigmoid / predict_proba": true,
+  "1.3 train_logreg": true,
+  "1.4 metrics": true,
+  "2.1 build_mlp": true,
+  "2.2 train_mlp": true,
+  "3.1–3.2 cosine / top_k_similar": true,
+  "3.3 knn_predict": true,
+  "4.2–4.3 prompt / parse_label": false,
+  "4.1 + 4.4 call_openai / llm_classify_batch": false
+ },
+ "experiments": [
+  {
+   "key": "ml_f1",
+   "time": "15:45:17"
+  },
+  {
+   "key": "ml_f1",
+   "time": "15:47:11"
+  },
+  {
+   "key": "ml_f1",
+   "time": "15:54:52"
+  },
+  {
+   "key": "ml_lr",
+   "time": "16:02:39"
+  },
+  {
+   "key": "dl_curve",
+   "time": "16:11:05"
+  },
+  {
+   "key": "dl_relu",
+   "time": "16:17:38"
+  },
+  {
+   "key": "dl_relu",
+   "time": "16:18:38"
+  },
+  {
+   "key": "emb_search",
+   "time": "16:20:46"
+  },
+  {
+   "key": "emb_tricky",
+   "time": "16:22:26"
+  },
+  {
+   "key": "llm_models",
+   "time": "16:38:53"
+  },
+  {
+   "key": "llm_fewshot",
+   "time": "16:43:51"
+  }
+ ],
+ "results": {
+  "1. BoW + LogReg (tự code)": {
+   "accuracy": 0.9690322580645161,
+   "precision": 0.975609756097561,
+   "recall": 0.7843137254901961,
+   "f1": 0.8695652173913043,
+   "f1_SUB": 0.8571428571428571,
+   "train_s": 3.1518957369999043,
+   "msg_per_s": 31641.70646376931,
+   "p50_ms": 0.04838200015910843,
+   "p95_ms": 0.08586254998590444,
+   "usd_per_1k": 0.0
+  },
+  "2. BoW + MLP (deep learning)": {
+   "accuracy": 0.9806451612903225,
+   "precision": 0.978021978021978,
+   "recall": 0.8725490196078431,
+   "f1": 0.9222797927461139,
+   "f1_SUB": 0.9189189189189189,
+   "train_s": 3.7408587559998523,
+   "msg_per_s": 65165.57690005551,
+   "p50_ms": 0.1806710001801548,
+   "p95_ms": 0.23717414987913799,
+   "usd_per_1k": 0.0
+  },
+  "3a. Encoder (MiniLM) + kNN": {
+   "accuracy": 0.9767741935483871,
+   "precision": 0.8888888888888888,
+   "recall": 0.9411764705882353,
+   "f1": 0.9142857142857143,
+   "f1_SUB": 0.9189189189189189,
+   "train_s": 2.295597789999647,
+   "msg_per_s": 159.0990332520857,
+   "p50_ms": 13.094155500084526,
+   "p95_ms": 21.812233450191336,
+   "usd_per_1k": 0.0
+  },
+  "3b. Encoder (MiniLM) + LogReg": {
+   "accuracy": 0.9870967741935484,
+   "precision": 0.96,
+   "recall": 0.9411764705882353,
+   "f1": 0.9504950495049505,
+   "f1_SUB": 0.9230769230769231,
+   "train_s": 2.6230190229998698,
+   "msg_per_s": 1702.7443405166848,
+   "p50_ms": 6.386646500004645,
+   "p95_ms": 7.526800700156851,
+   "usd_per_1k": 0.0
+  },
+  "3c. Encoder (MiniLM) + MLP head": {
+   "accuracy": 0.9896774193548387,
+   "precision": 0.97,
+   "recall": 0.9509803921568627,
+   "f1": 0.9603960396039604,
+   "f1_SUB": 0.9743589743589743,
+   "train_s": 3.290920671999629,
+   "msg_per_s": 2177.193093275121,
+   "p50_ms": 6.316119500070272,
+   "p95_ms": 8.320573650166807,
+   "usd_per_1k": 0.0
+  }
+ }
+}
